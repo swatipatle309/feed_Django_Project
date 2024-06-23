@@ -1,0 +1,21 @@
+{% extends 'feed/base.html' %}
+{% load static %} 
+{% block content %}
+<h1>Feed</h1>
+{% for message in messages %}
+    <div class="message">
+        <p>{{ message.user.username }}: {{ message.content }}</p>
+        <a href="{% url 'like_message' message.id %}">Like</a> ({{ message.likes.count }})
+        <a href="{% url 'post_comment' message.id %}">Comment</a>
+        {% if message.user == user %}
+            <a href="{% url 'delete_message' message.id %}">Delete</a>
+        {% endif %}
+        <div class="comments">
+            {% for comment in message.comments.all %}
+                <p>{{ comment.user.username }}: {{ comment.content }}</p>
+                <a href="{% url 'like_comment' comment.id %}">Like</a> ({{ comment.likes.count }})
+            {% endfor %}
+        </div>
+    </div>
+{% endfor %}
+{% endblock %}
